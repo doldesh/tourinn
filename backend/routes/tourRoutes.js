@@ -6,11 +6,14 @@ import {
   updateTour,
   deleteTour,
   aliasTopTours,
+  getTourStats,
 } from "../controllers/tourController.js";
 
 const router = express.Router();
 
 // router.param("id", checkID);
+router.route("/tour-stats").get(getTourStats);
+
 router.route("/top-5-cheap").get(aliasTopTours, getAllTours);
 
 router.route("/").get(getAllTours).post(createTour);
