@@ -10,17 +10,8 @@ const __dirname = path.dirname(__filename);
 
 connectDB();
 
-// const PORT = process.env.PORT || 3000;
-
-// Start server
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port: ${PORT}`);
-// });
-
-//Everything server related stays in this file
-
 const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, "utf-8"),
+  fs.readFileSync(`${__dirname}/tours-simple.json`, "utf-8")
 );
 
 //Import data into database

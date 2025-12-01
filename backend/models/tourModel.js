@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import slugify from "slugify";
+import validator from "validator";
 
 const tourSchema = new mongoose.Schema(
   {
@@ -8,6 +9,9 @@ const tourSchema = new mongoose.Schema(
       required: [true, "A tour must have a name"],
       unique: true,
       trim: true,
+      maxlength: [40, "A tour name cannot be more greater 40 characters"],
+      minlength: [10, "A tour name cannot be less than 10 characters"],
+      // validate: [validator.isAlpha, "A tour name must only contain characters"],
     },
     slug: String,
     duration: {
@@ -21,10 +25,16 @@ const tourSchema = new mongoose.Schema(
     difficulty: {
       type: String,
       required: [true, "A tour must have a difficulty"],
+      enum: {
+        values: ["easy", "medium", "difficult"],
+        message: "Difficulty can only be easy, medium, difficult",
+      },
     },
     ratingsAverage: {
       type: Number,
       default: 4.5,
+      max: [5, "Rating cannot be greater than 5.0"],
+      min: [1, "Rating cannot be less than 1.0"],
     },
     ratingsQuantity: {
       type: Number,
@@ -36,6 +46,12 @@ const tourSchema = new mongoose.Schema(
     },
     priceDiscount: {
       type: Number,
+      validate: {
+        validator: function (val) {
+          return val < this.price;
+        },
+        message: "Discount price ({VALUE}) cannot be greater tahn actual price",
+      },
     },
     summary: {
       type: String,
@@ -77,9 +93,22 @@ tourSchema.pre("save", function (next) {
 });
 
 //Query middleware
-// tourSchema.pre("find", function (next) {
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
+
+  this.start = Date.now();
+  next();
+});
+
+tourSchema.post(/^find/, function (docs, next) {
+  console.log(`Query took ${Date.now() - this.start} milliseconds`);
+  next();
+});
+
+//Aggregation middleware
+tourSchema.pre("aggregate", function (next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  console.log(this.pipeline());
   next();
 });
 
