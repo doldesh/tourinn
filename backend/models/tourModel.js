@@ -50,7 +50,7 @@ const tourSchema = new mongoose.Schema(
         validator: function (val) {
           return val < this.price;
         },
-        message: "Discount price ({VALUE}) cannot be greater tahn actual price",
+        message: "Discount price ({VALUE}) cannot be greater than actual price",
       },
     },
     summary: {
