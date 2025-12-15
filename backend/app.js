@@ -14,6 +14,7 @@ dotenv.config({ path: "./config.env" });
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.set("query parser", (str) => qs.parse(str, { allowDots: true }));
 
 //Parsing nested queries
@@ -37,7 +38,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-//Serve static file
+// //Serve static file
 app.use(express.static(path.join(__dirname, "./public")));
 
 //Routes
