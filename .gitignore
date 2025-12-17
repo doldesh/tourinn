@@ -1,5 +1,7 @@
 # Dependency directories (Frontend & Backend)
 **/node_modules/
+.DS_Store
+**/.DS_Store
 
 # Environment variables (Crucial for security!)
 **/.env
