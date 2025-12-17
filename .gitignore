@@ -1,0 +1,8 @@
+# Dependency directories (Frontend & Backend)
+**/node_modules/
+
+# Environment variables (Crucial for security!)
+**/.env
+
+# Custom environment file
+**/config.env
