@@ -1,9 +1,11 @@
-// Uncaught exceptions
-process.on("uncaughtException", (err) => {
-  console.log("UNCAUGHT EXCEPTION 💥 Shutting down...");
-  console.log(err.name, err.message);
-  process.exit(1);
-});
+process
+  .on("unhandledRejection", (reason, p) => {
+    console.error(reason, "Unhandled Rejection at Promise", p);
+  })
+  .on("uncaughtException", (err) => {
+    console.error(err, "Uncaught Exception thrown");
+    process.exit(1);
+  });
 
 import app from "./app.js";
 import connectDB from "./config/db.js";
