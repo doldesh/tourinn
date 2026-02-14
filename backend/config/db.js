@@ -7,11 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // ✅ Load your custom config.env file
-dotenv.config({ path: path.resolve(__dirname, "../config.env") });
+dotenv.config({ path: path.resolve(__dirname, "./config.env") });
 
 const DB = process.env.DATABASE.replace(
   "<db_password>",
-  process.env.DATABASE_PASSWORD
+  process.env.DATABASE_PASSWORD,
 );
 
 const connectDB = async () => {

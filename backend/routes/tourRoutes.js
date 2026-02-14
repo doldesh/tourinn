@@ -20,7 +20,10 @@ router.route("/monthly-plan/:year").get(getMonthlyPlan);
 
 router.route("/top-5-cheap").get(aliasTopTours, getAllTours);
 
-router.route("/").get(protect, getAllTours).post(createTour);
+router
+  .route("/")
+  .get(protect, getAllTours)
+  .post(protect, restrictTo("admin", "lead-guide"), createTour);
 
 router
   .route("/:id")
