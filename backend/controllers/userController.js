@@ -79,6 +79,30 @@ export const updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+export const deleteMe = catchAsync(async (req, res, next) => {
+  //get the user
+  const user = await User.findById(req.user.id).select("+password");
+
+  //throw error if user cannot be found but token exist
+  if (!user) {
+    return next(new AppError("User not found", 404));
+  }
+
+  //compare typed password to db password
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(
+      new AppError("The provided password is incorrect! Please try again", 401),
+    );
+  }
+
+  await User.findByIdAndUpdate(req.user.id, { active: "false" });
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
+
 export const deleteUser = (req, res) => {
   res.status(500).json({
     status: "error",
